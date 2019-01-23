@@ -8,12 +8,17 @@ from time import sleep
 import atexit
 import sys
 import json
+import sqlite3
+from sqlite3 import Error
 
 
 
-account_sid = "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-token = "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-pn_sid = "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+database = ".\\Twilio.db"
+
+
+account_sid = "AC3516d00fc578410654c5a771d4558d1c"
+token = "b0bbba38d5d53bf6cf6d692301b52369"
+pn_sid = "PN71239c86b7fc6b418d05d208e04fc79e"
 ngrokPath = "C:\\Users\\wade2\\Downloads\\ngrok"
 
 client = Client(account_sid, token)
@@ -30,26 +35,29 @@ class PhoneClient:
             body = message)
 
 
+        pass
+    pass
+
+#Create connection to db
+def CreateConnection(db_file):
+    try:
+        conn = sqlite3.connect(db_file)
+        return conn
+    except Error as e:
+        print(e)
+ 
+    return None
+conn = CreateConnection(database)
 
 #This data is going to be in the database
 
+
 #Messages
 def Hello(message):
-    message = message.strip().lower()
-    return {
-        "hi": True,
-        "hello": True,
-        "hey": True
-
-    }.get(message, False) 
+   return SelectContent(conn, "Hello", message)
 
 def Question(message):
-    message = message.strip().lower()
-    return {
-        "i have a question": True,
-        "i have a question.": True
-
-    }.get(message, False) 
+    return SelectContent(conn, "Question", message)
 
 
 
@@ -124,6 +132,34 @@ def IncomingSms():
 def Kill():
     os.system("start cmd /c taskkill /f /IM ngrok.exe")
     pass
+
+
+
+
+
+
+#Database methods
+
+#Select content of a given task
+def SelectContent(conn, task, question):
+   
+    cur = conn.cursor()
+    cur.execute("SELECT Content FROM Questions where Task=?", (task,))
+ 
+    rows = cur.fetchall()
+ 
+    for row in rows:
+        if(StripTask(row) == question):
+            return True
+    return False
+
+#Strip format of content
+def StripTask(content):
+    ret = ""
+    for letter in content:
+        if(letter != ')' or letter !="'" or letter != '('):
+            ret += letter
+    return ret
 
 
 
