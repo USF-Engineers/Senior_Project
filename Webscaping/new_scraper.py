@@ -24,7 +24,7 @@ def FAQ_scrap():
                 strings = li_tag.find_all(string=True)
 
                 
-                Answer = " ".join(strings).replace('\n'," ").replace('\r',"").replace("  ", "")
+                Answer = " ".join(strings).replace('\n'," ").replace('\r',"").replace("  ", " ")
                 #print("SINGLE ANSWER: -----------")
                 #print(Answer)
 
