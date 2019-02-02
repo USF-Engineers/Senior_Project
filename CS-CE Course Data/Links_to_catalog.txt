@@ -1,0 +1,2 @@
+CE: http://ugs.usf.edu/catalog/?catyr=1819&category=majors&display=detail&maj=ECP&deg=BSCP
+CS: http://ugs.usf.edu/catalog/?catyr=1819&category=majors&display=detail&maj=BCS&deg=BSCS
